@@ -1,5 +1,5 @@
 const calcontainer = document.querySelector('.btncontainers');
-
+const displayscreen = document.querySelector('.resultscreen');
 
 
 
@@ -47,3 +47,89 @@ btn12.textContent = "."
 btn13.textContent = "0"
 btn14.textContent = "="
 btn15.textContent = "+"
+
+let allbtns = document.querySelectorAll('button');
+temparray = [];
+firstnum = [];
+secondnum = [];
+var opIndex = 0;
+
+//-----------add event listener to all buttons----------//
+for (i of allbtns){
+    i.addEventListener('click', function(){
+        
+        temparray.push(this.textContent)
+        displayscreen.textContent = temparray.join('')
+        
+       opIndex = temparray.indexOf('+')
+        
+        
+    })
+    
+}
+//-----------Add numbers that are before the operator to firstnum array----------//
+btn15.addEventListener('click', function(){
+    
+    for(let i = 1; i < temparray.length; i ++){
+        firstnum.push(temparray[i - 1])
+    }
+    firstnum = firstnum.map(Number).join('');
+    console.log(firstnum)
+    
+})
+
+findAdd()
+function findAdd(){
+btn14.addEventListener('click', function(){
+for (let i = opIndex + 1; i < temparray.length - 1; i++){
+   secondnum.push(temparray[i])
+}
+
+secondnum = secondnum.map(Number).join('');
+
+console.log(secondnum)
+//console.log(firstnum + secondnum)
+
+
+})
+}
+
+
+
+function operate(op,num1,num2){
+    if( op === '+'){
+        return add(num1,num2)
+    }
+    else if (op === subtract){
+        return subtract(num1,num2)
+    }
+    else if (op === multiply){
+        return multiply(num1,num2)
+    }
+    else if (op === divide){
+        return divide(num1,num2)
+    }
+}
+
+displayscreen.textContent = (operate(multiply(12,12)))
+console.log(operate(multiply,12,12))
+
+
+
+
+
+function add(num1,num2){
+    return num1 + num2
+}
+
+function subtract(num1,num2){
+    return num1 - num2
+}
+
+function multiply(num1,num2){
+ return num1 * num2
+}
+
+function divide(num1,num2){
+    return num1 / num2
+}
