@@ -1,7 +1,10 @@
 const calcontainer = document.querySelector('.btncontainers');
 const displayscreen = document.querySelector('.resultscreen');
-
-
+var firstnum;
+var secondnum;
+var result = 0;
+var secondNumArray;
+var oper;
 
 //-----------Create 16 buttons----------//
 for (let i = 0; i < 16; i++)
@@ -50,8 +53,7 @@ btn15.textContent = "+"
 
 let allbtns = document.querySelectorAll('button');
 temparray = [];
-firstnum = [];
-secondnum = [];
+
 var opIndex = 0;
 
 //-----------add event listener to all buttons----------//
@@ -61,38 +63,101 @@ for (i of allbtns){
         temparray.push(this.textContent)
         displayscreen.textContent = temparray.join('')
         
-       opIndex = temparray.indexOf('+')
+      
         
         
     })
     
 }
 //-----------Add numbers that are before the operator to firstnum array----------//
+
 btn15.addEventListener('click', function(){
+   oper = '+' 
+  firstnum = parseInt(temparray.map(Number).join(''));
     
-    for(let i = 1; i < temparray.length; i ++){
-        firstnum.push(temparray[i - 1])
-    }
-    firstnum = firstnum.map(Number).join('');
-    console.log(firstnum)
+  result += firstnum;
+  
     
-})
+    
+});
+
+btn11.addEventListener('click', function(){
+    oper = '-'
+    firstnum = parseInt(temparray.map(Number).join(''));
+    
+    result += firstnum;
+    
+});
+
+btn7.addEventListener('click', function(){
+    oper = '*'
+    firstnum = parseInt(temparray.map(Number).join(''));
+    
+    result += firstnum;
+  
+    
+});
+
+btn3.addEventListener('click', function(){
+    oper = '÷'
+    firstnum = parseInt(temparray.map(Number).join(''));
+   
+    result += firstnum;
+    
+});
+
 
 findAdd()
+
+
+
 function findAdd(){
 btn14.addEventListener('click', function(){
-for (let i = opIndex + 1; i < temparray.length - 1; i++){
-   secondnum.push(temparray[i])
-}
 
-secondnum = secondnum.map(Number).join('');
+    var operIndex = temparray.indexOf(oper) + 1;
 
-console.log(secondnum)
-//console.log(firstnum + secondnum)
+    result += secondnum;
+    
+    secondNumArray = temparray.slice(operIndex,temparray.length-1);
+    secondnum = parseInt(secondNumArray.map(Number).join(''));
+    console.log(firstnum)
+    console.log(secondnum)
+    displayscreen.textContent = operate(oper,firstnum,secondnum)
+    
+     /* result += secondnum;
+    if ( oper === '+'){
+        console.log('this is plus')
+        console.log(oper)
+        secondNumArray = temparray.slice(operIndex,temparray.length-1);
+        secondnum = parseInt(secondNumArray.map(Number).join(''));
+        console.log(add(firstnum,secondnum))
+        displayscreen.textContent = add(firstnum,secondnum)
+    }
+    
+   if (oper === '-'){
+        console.log('this is minus')
+        console.log(oper)
+        secondNumArray = temparray.slice(operIndex,temparray.length-1);
+        secondnum = parseInt(secondNumArray.map(Number).join(''));
+        console.log(subtract(firstnum,secondnum))
+        displayscreen.textContent = subtract(firstnum,secondnum)
+    }
+     */
+    
+   
+    console.log(secondnum)
+   
+    
+    
 
-
+    
+    
+   
 })
 }
+
+
+
 
 
 
@@ -100,19 +165,19 @@ function operate(op,num1,num2){
     if( op === '+'){
         return add(num1,num2)
     }
-    else if (op === subtract){
+    else if (op === '-'){
         return subtract(num1,num2)
     }
-    else if (op === multiply){
+    else if (op === '*'){
         return multiply(num1,num2)
     }
-    else if (op === divide){
+    else if (op === '÷'){
         return divide(num1,num2)
     }
 }
 
-displayscreen.textContent = (operate(multiply(12,12)))
-console.log(operate(multiply,12,12))
+
+
 
 
 
@@ -127,9 +192,10 @@ function subtract(num1,num2){
 }
 
 function multiply(num1,num2){
- return num1 * num2
+    return num1 * num2
 }
 
 function divide(num1,num2){
     return num1 / num2
 }
+
