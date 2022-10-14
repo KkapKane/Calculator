@@ -5,7 +5,7 @@ var secondnum;
 var result = 0;
 var secondNumArray;
 var oper;
-
+var answer;
 //-----------Create 16 buttons----------//
 for (let i = 0; i < 16; i++)
 {
@@ -33,6 +33,7 @@ const btn12 = document.querySelector('.btn12');
 const btn13 = document.querySelector('.btn13');
 const btn14 = document.querySelector('.btn14');
 const btn15 = document.querySelector('.btn15');
+const clearbtn = document.querySelector('.clearbtn')
 
 btn0.textContent = "7"
 btn1.textContent = "8"
@@ -41,7 +42,7 @@ btn3.textContent = "÷"
 btn4.textContent = "4"
 btn5.textContent = "5"
 btn6.textContent = "6"
-btn7.textContent = "x"
+btn7.textContent = "*"
 btn8.textContent = "1"
 btn9.textContent = "2"
 btn10.textContent = "3"
@@ -50,6 +51,7 @@ btn12.textContent = "."
 btn13.textContent = "0"
 btn14.textContent = "="
 btn15.textContent = "+"
+
 
 let allbtns = document.querySelectorAll('button');
 temparray = [];
@@ -69,7 +71,7 @@ for (i of allbtns){
     })
     
 }
-//-----------Add numbers that are before the operator to firstnum array----------//
+//-----------Add button----------//
 
 btn15.addEventListener('click', function(){
    oper = '+' 
@@ -80,7 +82,7 @@ btn15.addEventListener('click', function(){
     
     
 });
-
+//-----------Subtract button----------//
 btn11.addEventListener('click', function(){
     oper = '-'
     firstnum = parseInt(temparray.map(Number).join(''));
@@ -88,8 +90,9 @@ btn11.addEventListener('click', function(){
     result += firstnum;
     
 });
-
+//-----------Multiply button----------//
 btn7.addEventListener('click', function(){
+    
     oper = '*'
     firstnum = parseInt(temparray.map(Number).join(''));
     
@@ -97,7 +100,7 @@ btn7.addEventListener('click', function(){
   
     
 });
-
+//-----------divide button----------//
 btn3.addEventListener('click', function(){
     oper = '÷'
     firstnum = parseInt(temparray.map(Number).join(''));
@@ -105,9 +108,14 @@ btn3.addEventListener('click', function(){
     result += firstnum;
     
 });
+//-----------clearbutton button----------//
+clearbtn.addEventListener('click', function(){
+    temparray = [];
+    displayscreen.textContent = ''
+    
+});
 
 
-findAdd()
 
 
 
@@ -116,13 +124,15 @@ btn14.addEventListener('click', function(){
 
     var operIndex = temparray.indexOf(oper) + 1;
 
-    result += secondnum;
+    
     
     secondNumArray = temparray.slice(operIndex,temparray.length-1);
-    secondnum = parseInt(secondNumArray.map(Number).join(''));
+    secondnum = parseInt(secondNumArray.join(''));
     console.log(firstnum)
     console.log(secondnum)
-    displayscreen.textContent = operate(oper,firstnum,secondnum)
+    result += secondnum;
+    answer = operate(oper,firstnum,secondnum)
+    displayscreen.textContent = answer
     
      /* result += secondnum;
     if ( oper === '+'){
@@ -145,7 +155,7 @@ btn14.addEventListener('click', function(){
      */
     
    
-    console.log(secondnum)
+   
    
     
     
@@ -158,7 +168,7 @@ btn14.addEventListener('click', function(){
 
 
 
-
+findAdd()
 
 
 function operate(op,num1,num2){
