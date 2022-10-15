@@ -5,7 +5,7 @@ var secondnum;
 var result = 0;
 var secondNumArray;
 var oper;
-var answer;
+
 //-----------Create 16 buttons----------//
 for (let i = 0; i < 16; i++)
 {
@@ -34,6 +34,7 @@ const btn13 = document.querySelector('.btn13');
 const btn14 = document.querySelector('.btn14');
 const btn15 = document.querySelector('.btn15');
 const clearbtn = document.querySelector('.clearbtn')
+const delbtn = document.querySelector('.delbtn')
 
 btn0.textContent = "7"
 btn1.textContent = "8"
@@ -65,7 +66,9 @@ for (i of allbtns){
         temparray.push(this.textContent)
         displayscreen.textContent = temparray.join('')
         
-      
+     /*  if (result > 0){
+        displayscreen.textContent = result  + oper +  this.textContent
+      } */
         
         
     })
@@ -74,12 +77,36 @@ for (i of allbtns){
 //-----------Add button----------//
 
 btn15.addEventListener('click', function(){
-   oper = '+' 
-  firstnum = parseInt(temparray.map(Number).join(''));
+    var operIndex = temparray.indexOf(oper) + 1;
+    oper = '+'
+    firstnum = parseInt(temparray.map(Number).join(''));
+    secondNumArray = temparray.slice(operIndex,temparray.length-1);
     
-  result += firstnum;
+    if(result > 0 && oper === '+'){
+    temparray = [];
+    temparray.push(result)
+    temparray.push('+')
+    console.log('this temp array : ' + temparray)
+    firstnum = result;
+   
+    secondnum = parseInt(secondNumArray.join(''));
+   
+    result = operate(oper,firstnum,secondnum)
+
+    displayscreen.textContent = result 
+    console.log(firstnum)
+    console.log(secondnum)
+    console.log(secondNumArray)
+    console.log(result)
+  return result
+}
+ 
+   
+ 
+    
+  result = firstnum;
+
   
-    
     
 });
 //-----------Subtract button----------//
@@ -87,36 +114,89 @@ btn11.addEventListener('click', function(){
     oper = '-'
     firstnum = parseInt(temparray.map(Number).join(''));
     
+    if(result > 0){
+      temparray = [];
+      firstnum = result;
+    return result
+  }
+   
+     
+   
+      
     result += firstnum;
+  
     
-});
+      
+  });
+
+    
+
 //-----------Multiply button----------//
 btn7.addEventListener('click', function(){
     
     oper = '*'
     firstnum = parseInt(temparray.map(Number).join(''));
     
-    result += firstnum;
-  
+
+    if(result > 0){
+        temparray = [];
+        firstnum = result;
+      return result
+    }
+     
+       
+     
+        
+      result += firstnum;
     
-});
+      
+        
+    });
+
+  
 //-----------divide button----------//
 btn3.addEventListener('click', function(){
     oper = '÷'
     firstnum = parseInt(temparray.map(Number).join(''));
    
-    result += firstnum;
+    if(result > 0){
+      
+        temparray = [];
+        firstnum = result;
+        result = operate(oper,firstnum,secondnum)
+        displayscreen.textContent = firstnum
+      return result
+    }
+     
+       
+     
+        
+      result += firstnum;
     
-});
+      
+        
+    });
 //-----------clearbutton button----------//
 clearbtn.addEventListener('click', function(){
     temparray = [];
+    result = 0;
     displayscreen.textContent = ''
     
 });
+function deleteNum (){
+  temparray.pop();
+   temparray.pop();
+  
+}
 
-
-
+//-----------delete button button----------//
+delbtn.addEventListener('click', function(){
+ 
+   deleteNum();
+  
+  displayscreen.textContent = temparray.join('')
+  
+});
 
 
 function findAdd(){
@@ -128,41 +208,13 @@ btn14.addEventListener('click', function(){
     
     secondNumArray = temparray.slice(operIndex,temparray.length-1);
     secondnum = parseInt(secondNumArray.join(''));
-    console.log(firstnum)
-    console.log(secondnum)
+    console.log('firstnum: ' + firstnum)
+    console.log('secondnum: ' + secondnum)
     result += secondnum;
-    answer = operate(oper,firstnum,secondnum)
-    displayscreen.textContent = answer
     
-     /* result += secondnum;
-    if ( oper === '+'){
-        console.log('this is plus')
-        console.log(oper)
-        secondNumArray = temparray.slice(operIndex,temparray.length-1);
-        secondnum = parseInt(secondNumArray.map(Number).join(''));
-        console.log(add(firstnum,secondnum))
-        displayscreen.textContent = add(firstnum,secondnum)
-    }
-    
-   if (oper === '-'){
-        console.log('this is minus')
-        console.log(oper)
-        secondNumArray = temparray.slice(operIndex,temparray.length-1);
-        secondnum = parseInt(secondNumArray.map(Number).join(''));
-        console.log(subtract(firstnum,secondnum))
-        displayscreen.textContent = subtract(firstnum,secondnum)
-    }
-     */
-    
-   
-   
-   
-    
-    
-
-    
-    
-   
+    result = operate(oper,firstnum,secondnum)
+    displayscreen.textContent = result
+    temparray = [];
 })
 }
 
@@ -209,3 +261,17 @@ function divide(num1,num2){
     return num1 / num2
 }
 
+//listen to all keyboard events
+document.addEventListener('keydown', (event) => {
+  
+  var name = event.key;
+  var code = event.code;
+  if(name == 'Backspace'){
+    deleteNum();
+  }
+    temparray.push(name)
+    displayscreen.textContent = temparray.join('')
+  
+  // Alert the key name and key code on keydown
+  console.log((`Key pressed ${name} \r\n Key code value: ${code}`));
+}, false);
