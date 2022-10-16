@@ -1,16 +1,23 @@
 const calcontainer = document.querySelector(".btncontainers");
 const displayscreen = document.querySelector(".resultscreen");
+const prevScreen = document.querySelector(".prevScreen");
+
+
+
 var firstnum;
 var secondnum;
 var result = 0;
 var secondNumArray;
 var oper;
+var answer = 0;
 temparray = [];
+prevArray = [];
+onscreenarray = [];
 var opIndex = 0;
 
 //-----------Create 16 buttons----------//
 for (let i = 0; i < 16; i++) {
-  const btns = document.createElement("button");
+  const btns = document.createElement("Button");
   btns.classList.add("btn" + i);
   calcontainer.appendChild(btns);
 }
@@ -57,7 +64,10 @@ let allbtns = document.querySelectorAll("button");
 for (i of allbtns) {
   i.addEventListener("click", function () {
     temparray.push(this.textContent);
+    onscreenarray.push(this.textContent);
     displayscreen.textContent = temparray.join("");
+    console.log(onscreenarray)
+    
   });
 }
 
@@ -65,35 +75,26 @@ for (i of allbtns) {
 
   btn15.addEventListener("click", function () {
 
-    var operIndex = temparray.indexOf(oper) + 1;
+    
     oper = "+";
     
     firstnum = parseInt(temparray.map(Number).join(""));
-    secondNumArray = temparray.slice(operIndex, temparray.length - 1);
-    if (secondnum == 'NaN') {
-      displayscreen.textContent = ''
-    }
-    if (result > 0 && oper === "+") {
-      temparray = [];
-      temparray.push(result);
-      temparray.push("+");
-      console.log("this temp array : " + temparray);
+    if (result > 0) {
       firstnum = result;
-      secondnum = parseInt(secondNumArray.join(""));
-      result = operate(oper, firstnum, secondnum);
-      displayscreen.textContent = result;
       return result;
     }
-    result = firstnum;
+    result += firstnum;
   
   });
 
 //-----------Subtract button----------//
 btn11.addEventListener("click", function () {
+  
   oper = "-";
+ 
   firstnum = parseInt(temparray.map(Number).join(""));
   if (result > 0) {
-    temparray = [];
+    
     firstnum = result;
     return result;
   }
@@ -103,14 +104,41 @@ btn11.addEventListener("click", function () {
 //-----------Multiply button----------//
 btn7.addEventListener("click", function () {
   oper = "*";
-  firstnum = parseInt(temparray.map(Number).join(""));
-  if (result > 0) {
-    temparray = [];
-    firstnum = result;
-    return result;
+  console.log('this onscreenarray ' + onscreenarray)
+  
+  displayscreen.textContent = operate(oper, firstnum, secondnum)
+  if (onscreenarray[1] == oper) {
+    firstnum = parseInt(temparray.map(Number).join(""));
+    secondNumArray = temparray.slice(operIndex, temparray.length - 1);
+    secondnum = parseInt(secondNumArray.join(""));
+    displayscreen.textContent = operate(oper,firstnum,secondnum)
   }
-  result += firstnum;
+  if (answer == 0) {
+    oper = "*";
+    firstnum = parseInt(temparray.map(Number).join(""));
+    prev = [...temparray];
+  
+    var operIndex = temparray.indexOf(oper) + 1;
+    secondNumArray = temparray.slice(operIndex, temparray.length - 1);
+    secondnum = parseInt(secondNumArray.join(""));
+    result = operate(oper, firstnum, secondnum);
+    console.log(prev)
+    prevScreen.textContent = prev.join('')
+    temparray = [];
+    displayscreen.textContent = ''
+    result += firstnum;
+  }
+  else if (answer == result){
+    prevScreen.textContent = answer;
+    displayscreen.textContent = answer + '  ' + ' * '
+    firstnum = answer;
+    var operIndex = temparray.indexOf(oper) + 1;
+    secondNumArray = temparray.slice(operIndex, temparray.length - 1);
+    secondnum = parseInt(secondNumArray.join(""));
+    
+  }
 
+ 
 });
 
 //-----------divide button----------//
@@ -118,10 +146,9 @@ btn3.addEventListener("click", function () {
   oper = "÷";
   firstnum = parseInt(temparray.map(Number).join(""));
   if (result > 0) {
-    temparray = [];
+    
     firstnum = result;
-    result = operate(oper, firstnum, secondnum);
-    displayscreen.textContent = firstnum;
+    
     return result;
   }
   result += firstnum;
@@ -130,7 +157,9 @@ btn3.addEventListener("click", function () {
 //-----------clearbutton button----------//
 clearbtn.addEventListener("click", function () {
   temparray = [];
+  prev = [];
   result = 0;
+  prevScreen.textContent = "";
   displayscreen.textContent = "";
 });
 function deleteNum() {
@@ -162,7 +191,15 @@ function findAdd() {
     result += secondnum;
     result = operate(oper, firstnum, secondnum);
     displayscreen.textContent = result;
+    prevScreen.textContent = prev.join(' ') + ' ' + temparray.join(' ') + ' ' + result
+    
+    firstnum = result;
+    answer = result;
+    prev = [];
     temparray = [];
+    onscreenarray = [];
+    temparray.push(firstnum);
+    
     return
   });
 }
@@ -217,6 +254,7 @@ document.addEventListener(
     }
     madenum = parseInt(temparray.push(name));
     displayscreen.textContent = temparray.join("");
+   
     // Alert the key name and key code on keydown
     console.log(`Key pressed ${name} \r Key code value: ${code}`);
   },
